@@ -1,7 +1,7 @@
 import { Button, Col, Container, Row, Card } from 'react-bootstrap'
 import { useState } from 'react';
 
-const Playground = ({ data, onplayerData }) => {
+const Playground = ({ data, onplayerData, onloser }) => {
     const [show, setshow] = useState(false)
     const [result, setResult] = useState({
         Lottery: 0,
@@ -11,17 +11,18 @@ const Playground = ({ data, onplayerData }) => {
     })
 
     const updateScore = (rnd) => {
-        const name = rnd % 2 === 0 ? "player1" : "player2"
+        const name = rnd % 2 === 0 ? "player1" : "player2";
+        const loser = rnd % 2 === 0 ? "player2" : "player1";
         onplayerData(prev => ({ ...prev, [name]: { ...prev[name], score: prev[name].score + 1 } }))
 
         if (result.cnt + 1 >= data.rounds || data[name].score + 1 === Math.ceil(data.rounds / 2)) {
             alert(`GAME OVER -${name}: ${data[name].name} won !!🏆. play again ☺`)
             setResult(prev => ({
                 Lottery: 0,
-                winRound: "",
-                won: "",
+                winRound: data[name].name,
                 cnt: 0
             }))
+            onloser(data[loser].name);
             onplayerData(prev => ({
                 ...prev,
                 player1: { ...prev["player1"], score: 0 },
@@ -65,7 +66,9 @@ const Playground = ({ data, onplayerData }) => {
                 className="w-50 m-3"
                 variant="dark"
                 onClick={() => onClickHandler("player2")}
-                disabled={data.player1.name.length >= 1 ? false : true}>Play</Button>
+                disabled={data.player1.name.length >= 1 &&
+                    data.player2.name.length >= 1
+                    && data.rounds !== 0 ? false : true}>Play</Button>
             <p>
                 the number is :
             </p>
