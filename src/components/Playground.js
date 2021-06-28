@@ -14,13 +14,18 @@ const Playground = ({ data, onplayerData }) => {
         const name = rnd % 2 === 0 ? "player1" : "player2"
         onplayerData(prev => ({ ...prev, [name]: { ...prev[name], score: prev[name].score + 1 } }))
 
-        if (result.cnt + 1 >= 5 || data[name].score + 1 === 3) {
+        if (result.cnt + 1 >= data.rounds || data[name].score + 1 === Math.ceil(data.rounds / 2)) {
             alert(`GAME OVER -${name}: ${data[name].name} won !!🏆. play again ☺`)
             setResult(prev => ({
                 Lottery: 0,
                 winRound: "",
                 won: "",
                 cnt: 0
+            }))
+            onplayerData(prev => ({
+                ...prev,
+                player1: { ...prev["player1"], score: 0 },
+                player2: { ...prev["player2"], score: 0 },
             }))
             return;
         }
@@ -69,6 +74,7 @@ const Playground = ({ data, onplayerData }) => {
             </p>
             <p>the winner is:<span className="mx-1 font2">{result.winRound}</span></p>
             <p>number of round: {result.cnt}</p>
+            <p>total rounds: {data.rounds}</p>
         </Card>
     </Container >
 }

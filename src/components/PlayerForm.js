@@ -51,7 +51,7 @@ const PlayerForm = ({ onplayerData }) => {
                     please enter a number.
                 </Form.Control.Feedback>
             </Form.Group>
-            <Button type="submit">Submit names</Button>
+            <Button type="submit">Submit</Button>
         </Form >
     </>
     );
